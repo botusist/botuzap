@@ -1,0 +1,50 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Settings {
+  id             Int      @id @default(autoincrement())
+  botName        String   @default("Assistente Virtual")
+  companyName    String
+  businessHours  String
+  serviceDuration String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Professional {
+  id           Int      @id @default(autoincrement())
+  name         String
+  specialty    String?
+  phone        String   @unique
+  active       Boolean  @default(true)
+  appointments Appointment[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Client {
+  id           Int      @id @default(autoincrement())
+  name         String
+  phone        String   @unique
+  appointments Appointment[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Appointment {
+  id             Int      @id @default(autoincrement())
+  date           DateTime
+  status         String   @default("SCHEDULED") // SCHEDULED, CONFIRMED, CANCELLED
+  client         Client   @relation(fields: [clientId], references: [id])
+  clientId       Int
+  professional   Professional @relation(fields: [professionalId], references: [id])
+  professionalId Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

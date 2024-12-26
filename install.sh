@@ -46,7 +46,7 @@ apt install -y gconf-service libgbm-dev libasound2 libatk1.0-0 libc6 libcairo2 l
     libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 \
     libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 \
     libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 \
-    ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget build-essential
+    ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget build-essential git
 check_command "Instalação das dependências do sistema"
 
 echo -e "\n${YELLOW}Instalando Google Chrome...${NC}"
@@ -77,7 +77,33 @@ echo -e "\n${YELLOW}Instalando dependências do Node.js...${NC}"
 npm install
 check_command "Instalação das dependências do Node.js"
 
+# Criar arquivo .env se não existir
+if [ ! -f ".env" ]; then
+    echo -e "\n${YELLOW}Criando arquivo .env...${NC}"
+    cp .env.example .env
+    check_command "Criação do arquivo .env"
+fi
+
 echo -e "\n${YELLOW}Configurando PM2...${NC}"
+# Criar arquivo de configuração do PM2 se não existir
+if [ ! -f "ecosystem.config.js" ]; then
+    echo -e "\n${YELLOW}Criando arquivo ecosystem.config.js...${NC}"
+    cat > ecosystem.config.js << EOL
+module.exports = {
+  apps: [{
+    name: 'botuzap',
+    script: 'src/index.js',
+    watch: true,
+    env: {
+      NODE_ENV: 'production',
+      PORT: 3333
+    }
+  }]
+}
+EOL
+    check_command "Criação do arquivo ecosystem.config.js"
+fi
+
 pm2 start ecosystem.config.js
 check_command "Início do aplicativo"
 
@@ -91,8 +117,7 @@ PUBLIC_IP=$(curl -s ifconfig.me)
 
 echo -e "\n${GREEN}=== Instalação Concluída! ===${NC}"
 echo -e "Acesse:"
-echo -e "${GREEN}QR Code: http://$PUBLIC_IP:3001${NC}"
-echo -e "${GREEN}Gerenciamento: http://$PUBLIC_IP:3001/manage${NC}"
+echo -e "${GREEN}Gerenciamento: http://$PUBLIC_IP:3333/manage${NC}"
 
 echo -e "\n${YELLOW}Comandos úteis:${NC}"
 echo -e "- Ver logs: ${GREEN}pm2 logs botuzap${NC}"

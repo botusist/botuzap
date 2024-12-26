@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - AgendAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-50">
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold text-gray-900">Configurações do Sistema</h1>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        <div class="bg-white shadow rounded-lg p-6">
+            <!-- Configuração OpenAI -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4">Configuração da OpenAI</h2>
+                <form id="openai-form" class="space-y-4">
+                    <div>
+                        <label for="api-key" class="block text-sm font-medium text-gray-700">
+                            Chave da API (API Key)
+                        </label>
+                        <input type="password" id="api-key" name="apiKey" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <p class="mt-1 text-sm text-gray-500">
+                            Obtenha sua chave em: <a href="https://platform.openai.com/api-keys" target="_blank" class="text-blue-600 hover:text-blue-800">platform.openai.com/api-keys</a>
+                        </p>
+                    </div>
+
+                    <div>
+                        <label for="model" class="block text-sm font-medium text-gray-700">
+                            Modelo
+                        </label>
+                        <select id="model" name="model" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <option value="gpt-4">GPT-4 (Mais avançado)</option>
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Mais rápido)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="prompt" class="block text-sm font-medium text-gray-700">
+                            Prompt Personalizado
+                        </label>
+                        <textarea id="prompt" name="prompt" rows="4" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            placeholder="Você é um assistente de agendamento profissional. Seja cordial e ajude os clientes a agendar horários..."></textarea>
+                        <p class="mt-1 text-sm text-gray-500">
+                            Este é o prompt que será usado para instruir a IA sobre como ela deve se comportar.
+                        </p>
+                    </div>
+
+                    <div>
+                        <label for="temperature" class="block text-sm font-medium text-gray-700">
+                            Temperatura (Criatividade)
+                        </label>
+                        <input type="range" id="temperature" name="temperature" min="0" max="1" step="0.1" value="0.7"
+                            class="mt-1 block w-full">
+                        <div class="flex justify-between text-sm text-gray-500">
+                            <span>Mais preciso</span>
+                            <span>Mais criativo</span>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        Salvar Configurações
+                    </button>
+                </form>
+            </div>
+
+            <!-- Configurações do WhatsApp -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Configuração do WhatsApp</h2>
+                <div id="whatsapp-status" class="mb-4 p-4 bg-gray-50 rounded">
+                    Status: <span id="status-text">Desconectado</span>
+                </div>
+                <div id="qrcode-container" class="mb-4 hidden">
+                    <img id="qrcode" src="" alt="QR Code WhatsApp" class="mx-auto">
+                </div>
+                <button onclick="reconnectWhatsApp()"
+                    class="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    Reconectar WhatsApp
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/settings.js"></script>
+</body>
+</html>

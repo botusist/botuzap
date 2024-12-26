@@ -62,6 +62,21 @@
             background-color: #ffc107;
             color: black;
         }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
         .test-message {
             display: flex;
             gap: 10px;
@@ -89,9 +104,31 @@
         .log-info { border-color: #3498db; }
         .log-success { border-color: #2ecc71; }
         .log-error { border-color: #e74c3c; }
+        .token-display {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+            word-break: break-all;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
+    <div class="card">
+        <h2>Nova Instância</h2>
+        <div class="form-group">
+            <label for="instanceName">Nome da Instância</label>
+            <input type="text" id="instanceName" placeholder="Ex: minha-instancia">
+        </div>
+        <button id="btnCreateInstance" class="button primary">Criar Instância</button>
+        <div id="tokenDisplay" class="token-display" style="display: none;">
+            <strong>Token da API:</strong>
+            <p id="tokenValue"></p>
+        </div>
+    </div>
+
     <div class="card status-card">
         <div>
             <h2>Status da Instância</h2>
@@ -123,14 +160,19 @@
         <div id="logs" class="logs"></div>
     </div>
 
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://localhost:3333/socket.io/socket.io.js"></script>
     <script>
-        const socket = io();
+        const socket = io('http://localhost:3333');
         let isConnected = false;
+        let currentInstance = null;
 
         // Elementos da UI
         const statusIndicator = document.getElementById('statusIndicator');
         const lastUpdate = document.getElementById('lastUpdate');
+        const btnCreateInstance = document.getElementById('btnCreateInstance');
+        const instanceName = document.getElementById('instanceName');
+        const tokenDisplay = document.getElementById('tokenDisplay');
+        const tokenValue = document.getElementById('tokenValue');
         const btnRestart = document.getElementById('btnRestart');
         const btnDisconnect = document.getElementById('btnDisconnect');
         const btnQR = document.getElementById('btnQR');
@@ -168,59 +210,113 @@
             addLog('Desconectado do servidor', 'error');
         });
 
-        socket.on('whatsapp_status', (data) => {
-            updateStatus(data.status, data.connected ? 'online' : 'offline');
-            addLog(`Status do WhatsApp: ${data.status}`);
-        });
+        // Eventos específicos da instância
+        function setupInstanceEvents(instanceName) {
+            socket.on(`qr_${instanceName}`, (qrCode) => {
+                // Criar ou atualizar elemento de QR code
+                let qrContainer = document.getElementById('qrcode');
+                if (!qrContainer) {
+                    qrContainer = document.createElement('div');
+                    qrContainer.id = 'qrcode';
+                    document.querySelector('.status-card').appendChild(qrContainer);
+                }
+                qrContainer.innerHTML = `<img src="${qrCode}" alt="QR Code">`;
+                addLog('Novo QR Code recebido', 'info');
+            });
 
-        socket.on('error', (error) => {
-            addLog(error.message, 'error');
-        });
+            socket.on(`whatsapp_status_${instanceName}`, (data) => {
+                updateStatus(data.status, data.connected ? 'online' : 'offline');
+                addLog(`Status do WhatsApp: ${data.status}`);
+            });
+
+            socket.on(`error_${instanceName}`, (error) => {
+                addLog(error.message, 'error');
+            });
+        }
 
         // Event Listeners
+        btnCreateInstance.addEventListener('click', async () => {
+            const name = instanceName.value.trim();
+            if (!name) {
+                addLog('Nome da instância é obrigatório', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3333/api/instance/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ instanceName: name })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    currentInstance = name;
+                    tokenDisplay.style.display = 'block';
+                    tokenValue.textContent = data.token;
+                    addLog(`Instância ${name} criada com sucesso`, 'success');
+                    setupInstanceEvents(name);
+                } else {
+                    addLog(data.error || 'Erro ao criar instância', 'error');
+                }
+            } catch (error) {
+                addLog('Erro ao criar instância: ' + error.message, 'error');
+            }
+        });
+
         btnRestart.addEventListener('click', () => {
+            if (!currentInstance) {
+                addLog('Nenhuma instância selecionada', 'error');
+                return;
+            }
             if (confirm('Tem certeza que deseja reiniciar a instância?')) {
-                socket.emit('restart');
+                socket.emit('restart', currentInstance);
                 addLog('Solicitação de reinício enviada');
             }
         });
 
         btnDisconnect.addEventListener('click', () => {
+            if (!currentInstance) {
+                addLog('Nenhuma instância selecionada', 'error');
+                return;
+            }
             if (confirm('Tem certeza que deseja desconectar?')) {
-                socket.emit('disconnect_whatsapp');
+                socket.emit('disconnect_whatsapp', currentInstance);
                 addLog('Solicitação de desconexão enviada');
             }
         });
 
         btnQR.addEventListener('click', () => {
-            socket.emit('request_qr');
+            if (!currentInstance) {
+                addLog('Nenhuma instância selecionada', 'error');
+                return;
+            }
+            socket.emit('request_qr', currentInstance);
             addLog('Solicitação de novo QR Code enviada');
         });
 
         btnSendTest.addEventListener('click', async () => {
+            if (!currentInstance) {
+                addLog('Nenhuma instância selecionada', 'error');
+                return;
+            }
+
             const number = testNumber.value.trim();
             const message = testMessage.value.trim();
 
             if (!number || !message) {
-                addLog('Por favor, preencha o número e a mensagem', 'error');
+                addLog('Número e mensagem são obrigatórios', 'error');
                 return;
             }
 
-            socket.emit('send_test', { number, message });
-            addLog(`Enviando mensagem de teste para ${number}`);
-        });
-
-        // Verificar status inicial
-        fetch('/status')
-            .then(response => response.json())
-            .then(data => {
-                updateStatus(data.clientReady ? 'Conectado' : 'Desconectado', 
-                           data.clientReady ? 'online' : 'offline');
-                addLog(`Status inicial: ${data.status}`);
-            })
-            .catch(error => {
-                addLog('Erro ao obter status inicial: ' + error.message, 'error');
+            socket.emit('send_test', currentInstance, {
+                number: number,
+                message: message
             });
+            addLog('Mensagem de teste enviada');
+        });
     </script>
 </body>
 </html>

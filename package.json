@@ -1,18 +1,29 @@
 {
   "name": "botuzap",
   "version": "1.0.0",
-  "description": "Sistema de gerenciamento de instâncias WhatsApp",
-  "main": "app.js",
+  "description": "Sistema de agendamento via WhatsApp com IA",
+  "main": "src/index.js",
   "scripts": {
-    "start": "node app.js",
-    "prod": "pm2 start ecosystem.config.js --env production",
-    "stop": "pm2 stop ecosystem.config.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
   },
   "dependencies": {
+    "@prisma/client": "^5.7.0",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "openai": "^4.0.0",
+    "prisma": "^5.7.0",
+    "puppeteer": "^13.7.0",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0",
     "socket.io": "^4.7.2",
-    "whatsapp-web.js": "^1.22.2-alpha.1",
-    "qrcode": "^1.5.3",
-    "puppeteer": "^13.7.0"
+    "whatsapp-web.js": "^1.22.2-alpha.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Horário - AgendAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto px-4 py-6">
+                <h1 class="text-3xl font-bold text-gray-900">Agendar Horário</h1>
+            </div>
+        </header>
+
+        <main class="max-w-2xl mx-auto px-4 py-6">
+            <div class="bg-white shadow rounded-lg">
+                <div class="p-6">
+                    <!-- Etapa 1: Selecionar Profissional -->
+                    <div id="step-1" class="space-y-4">
+                        <h2 class="text-xl font-semibold">1. Escolha o Profissional</h2>
+                        <div id="professionals-list" class="grid grid-cols-1 gap-4">
+                            <!-- Lista de profissionais será inserida aqui -->
+                        </div>
+                    </div>
+
+                    <!-- Etapa 2: Selecionar Data -->
+                    <div id="step-2" class="hidden space-y-4">
+                        <h2 class="text-xl font-semibold">2. Escolha a Data</h2>
+                        <div class="grid grid-cols-7 gap-2">
+                            <!-- Calendário será inserido aqui -->
+                        </div>
+                    </div>
+
+                    <!-- Etapa 3: Selecionar Horário -->
+                    <div id="step-3" class="hidden space-y-4">
+                        <h2 class="text-xl font-semibold">3. Escolha o Horário</h2>
+                        <div id="time-slots-list" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                            <!-- Horários disponíveis serão inseridos aqui -->
+                        </div>
+                    </div>
+
+                    <!-- Etapa 4: Informações do Cliente -->
+                    <div id="step-4" class="hidden space-y-4">
+                        <h2 class="text-xl font-semibold">4. Suas Informações</h2>
+                        <form id="client-form" class="space-y-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700">
+                                    Nome Completo
+                                </label>
+                                <input type="text" id="name" name="name" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700">
+                                    WhatsApp
+                                </label>
+                                <input type="tel" id="phone" name="phone" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                    placeholder="(11) 99999-9999">
+                            </div>
+                            <button type="submit"
+                                class="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                                Confirmar Agendamento
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Navegação entre etapas -->
+                    <div class="mt-6 flex justify-between">
+                        <button id="prev-step" onclick="previousStep()"
+                            class="hidden px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+                            Voltar
+                        </button>
+                        <button id="next-step" onclick="nextStep()"
+                            class="hidden px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            Próximo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/schedule.js"></script>
+</body>
+</html>

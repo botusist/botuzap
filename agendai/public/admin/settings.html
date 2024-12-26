@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - AgendAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex">
+        <!-- Sidebar / Menu Lateral -->
+        <div class="w-64 bg-blue-800 text-white">
+            <div class="p-4">
+                <h1 class="text-2xl font-bold">AgendAI</h1>
+                <p class="text-sm text-blue-200">Painel Administrativo</p>
+            </div>
+            <nav class="mt-4">
+                <a href="/admin/dashboard.html" class="flex items-center px-4 py-3 hover:bg-blue-700">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="/admin/professionals.html" class="flex items-center px-4 py-3 hover:bg-blue-700">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    Profissionais
+                </a>
+                <a href="/admin/settings.html" class="flex items-center px-4 py-3 bg-blue-900">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Configurações
+                </a>
+                <button onclick="handleLogout()" class="w-full flex items-center px-4 py-3 text-red-300 hover:bg-blue-700 hover:text-white">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    Sair
+                </button>
+            </nav>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="flex-1">
+            <header class="bg-white shadow">
+                <div class="px-4 py-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Configurações do Sistema</h2>
+                </div>
+            </header>
+
+            <main class="p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Configuração OpenAI -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold mb-4">Configuração da OpenAI</h3>
+                        <form id="openai-form" class="space-y-4">
+                            <div>
+                                <label for="api-key" class="block text-sm font-medium text-gray-700">
+                                    Chave da API (API Key)
+                                </label>
+                                <input type="password" id="api-key" name="apiKey" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <p class="mt-1 text-sm text-gray-500">
+                                    Obtenha sua chave em: <a href="https://platform.openai.com/api-keys" target="_blank" class="text-blue-600 hover:text-blue-800">platform.openai.com/api-keys</a>
+                                </p>
+                            </div>
+
+                            <div>
+                                <label for="model" class="block text-sm font-medium text-gray-700">
+                                    Modelo
+                                </label>
+                                <select id="model" name="model" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="gpt-4">GPT-4 (Mais avançado)</option>
+                                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Mais rápido)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="prompt" class="block text-sm font-medium text-gray-700">
+                                    Prompt Padrão
+                                </label>
+                                <textarea id="prompt" name="prompt" rows="4" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    placeholder="Você é um assistente de agendamento profissional..."></textarea>
+                            </div>
+
+                            <div>
+                                <label for="temperature" class="block text-sm font-medium text-gray-700">
+                                    Temperatura (Criatividade)
+                                </label>
+                                <input type="range" id="temperature" name="temperature" min="0" max="1" step="0.1" value="0.7"
+                                    class="mt-1 block w-full">
+                                <div class="flex justify-between text-sm text-gray-500">
+                                    <span>Mais preciso</span>
+                                    <span>Mais criativo</span>
+                                </div>
+                            </div>
+
+                            <button type="submit"
+                                class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                Salvar Configurações OpenAI
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Configuração WhatsApp -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold mb-4">Configuração do WhatsApp</h3>
+                        <div class="space-y-4">
+                            <div id="whatsapp-status" class="p-4 bg-gray-50 rounded">
+                                Status: <span id="status-text">Desconectado</span>
+                            </div>
+                            
+                            <div id="qrcode-container" class="hidden">
+                                <p class="text-sm text-gray-600 mb-2">Escaneie o QR Code com seu WhatsApp:</p>
+                                <img id="qrcode" src="" alt="QR Code WhatsApp" class="mx-auto">
+                            </div>
+
+                            <button onclick="reconnectWhatsApp()"
+                                class="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                                Reconectar WhatsApp
+                            </button>
+
+                            <div class="mt-4">
+                                <h4 class="font-medium mb-2">Instruções:</h4>
+                                <ol class="list-decimal list-inside space-y-2 text-sm text-gray-600">
+                                    <li>Clique em "Reconectar WhatsApp"</li>
+                                    <li>Aguarde o QR Code aparecer</li>
+                                    <li>Abra o WhatsApp no seu celular</li>
+                                    <li>Vá em Menu > WhatsApp Web</li>
+                                    <li>Escaneie o QR Code</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configurações Gerais -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold mb-4">Configurações Gerais</h3>
+                        <form id="general-settings-form" class="space-y-4">
+                            <div>
+                                <label for="business-name" class="block text-sm font-medium text-gray-700">
+                                    Nome do Negócio
+                                </label>
+                                <input type="text" id="business-name" name="businessName" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+
+                            <div>
+                                <label for="business-hours" class="block text-sm font-medium text-gray-700">
+                                    Horário de Funcionamento
+                                </label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-sm text-gray-600">Abertura</label>
+                                        <input type="time" id="opening-time" name="openingTime" required
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="text-sm text-gray-600">Fechamento</label>
+                                        <input type="time" id="closing-time" name="closingTime" required
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Dias de Funcionamento
+                                </label>
+                                <div class="mt-2 space-y-2">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="monday" name="workDays" value="1"
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <label for="monday" class="ml-2 text-sm text-gray-700">Segunda-feira</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="tuesday" name="workDays" value="2"
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <label for="tuesday" class="ml-2 text-sm text-gray-700">Terça-feira</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="wednesday" name="workDays" value="3"
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <label for="wednesday" class="ml-2 text-sm text-gray-700">Quarta-feira</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="thursday" name="workDays" value="4"
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <label for="thursday" class="ml-2 text-sm text-gray-700">Quinta-feira</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="friday" name="workDays" value="5"
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <label for="friday" class="ml-2 text-sm text-gray-700">Sexta-feira</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="saturday" name="workDays" value="6"
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <label for="saturday" class="ml-2 text-sm text-gray-700">Sábado</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="sunday" name="workDays" value="0"
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <label for="sunday" class="ml-2 text-sm text-gray-700">Domingo</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit"
+                                class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                Salvar Configurações Gerais
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Backup e Restauração -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold mb-4">Backup e Restauração</h3>
+                        <div class="space-y-4">
+                            <button onclick="generateBackup()"
+                                class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                Gerar Backup
+                            </button>
+
+                            <div>
+                                <label for="restore-file" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Restaurar Backup
+                                </label>
+                                <input type="file" id="restore-file" name="restoreFile" accept=".json"
+                                    class="block w-full text-sm text-gray-500
+                                        file:mr-4 file:py-2 file:px-4
+                                        file:rounded file:border-0
+                                        file:text-sm file:font-semibold
+                                        file:bg-blue-50 file:text-blue-700
+                                        hover:file:bg-blue-100">
+                            </div>
+
+                            <button onclick="restoreBackup()"
+                                class="w-full border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50">
+                                Iniciar Restauração
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/admin/settings.js"></script>
+</body>
+</html>

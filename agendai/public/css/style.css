@@ -1,0 +1,55 @@
+/* Estilos personalizados */
+.loading {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: .5;
+    }
+}
+
+/* Estilo para o QR code */
+#qrcode {
+    max-width: 200px;
+    height: auto;
+}
+
+/* Animação de fade */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Estilo para mensagens de status */
+.status-message {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.status-success {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.status-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.status-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+}

@@ -1,20 +1,53 @@
+require('dotenv').config();
 const express = require('express');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode');
 const http = require('http');
 const socketIO = require('socket.io');
 const path = require('path');
-const { generateToken } = require('./src/utils/tokenManager');
+const { generateToken } = require('./utils/tokenManager');
 
 // Configuração do Express e Socket.IO
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
-const port = process.env.PORT || 3001;
+const io = socketIO(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
+const port = 3333;
+
+// Middleware para logging
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
 
 // Middleware
 app.use(express.json());
-app.use(express.static('public'));
+
+// Servir arquivos estáticos do diretório public
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Servir manage.html da raiz do projeto
+app.get('/manage', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/manage.html'), (err) => {
+        if (err) {
+            console.error('Erro ao servir manage.html:', err);
+            res.status(500).send('Erro ao carregar a página');
+        } else {
+            console.log('manage.html servido com sucesso');
+        }
+    });
+});
+
+// Rota raiz
+app.get('/', (req, res) => {
+    const indexPath = path.join(__dirname, '../public/index.html');
+    console.log('Tentando servir:', indexPath);
+    res.sendFile(indexPath);
+});
 
 // Variáveis globais
 const instances = new Map();

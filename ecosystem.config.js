@@ -1,18 +1,18 @@
 module.exports = {
   apps: [{
     name: 'botuzap',
-    script: 'app.js',
+    script: 'src/index.js',
     instances: 1,
     autorestart: true,
-    watch: false,
+    watch: true,
     max_memory_restart: '1G',
     env: {
       NODE_ENV: 'production',
-      PORT: 3001
+      PORT: 3333
     },
     env_production: {
       NODE_ENV: 'production',
-      PORT: 3001
+      PORT: 3333
     }
   }]
 };
